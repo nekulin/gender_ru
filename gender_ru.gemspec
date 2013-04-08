@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.version       = GenderRu::VERSION
   spec.authors       = ['Maxim Dorofienko']
   spec.email         = %w(mdorfin@me.com)
-  spec.description   = %q{TODO: Write a gem description}
-  spec.summary       = %q{TODO: Write a gem summary}
+  spec.description   = 'Gem tries detect gender and ethnicity by name. Supports Russian and Azerbaijanian names.'
+  spec.summary       = 'Gem tries detect gender and ethnicity by name. Supports Russian and Azerbaijanian names.'
   spec.homepage      = 'https://github.com/miliru/gender_ru'
   spec.license       = 'MIT'
 
