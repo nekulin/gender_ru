@@ -1,6 +1,6 @@
 # GenderRu
 
-TODO: Write a gem description
+Gem tries detect gender and nationality by name. It supports Russian and Azerbaijanian names.
 
 ## Installation
 
@@ -18,7 +18,18 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+    ```ruby
+        name = GenderRu::FullName.new surname: 'Иванова', name: 'Анна', patronymic: 'Петровна'
+        name.gender         # => :female
+        name.ethnicity      # => :russian
+        name.female?        # => true
+        name.male?          # => false
+        name.russian?       # => true
+        name.azerbaijanian? # => false
+
+        # Husband's surname
+        name.male_surname   # => "Иванов"
+    ```
 
 ## Contributing
 
