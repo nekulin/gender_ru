@@ -18,19 +18,19 @@ Or install it yourself as:
 
 ## Usage
 
-    ```ruby
-    name = GenderRu::FullName.new surname: 'Иванова', name: 'Анна', patronymic: 'Петровна'
+```ruby
+name = GenderRu::FullName.new surname: 'Иванова', name: 'Анна', patronymic: 'Петровна'
 
-    name.gender         # => :female
-    name.ethnicity      # => :russian
-    name.female?        # => true
-    name.male?          # => false
-    name.russian?       # => true
-    name.azerbaijanian? # => false
+name.gender         # => :female
+name.ethnicity      # => :russian
+name.female?        # => true
+name.male?          # => false
+name.russian?       # => true
+name.azerbaijanian? # => false
 
-    # Husband's surname
-    name.male_surname   # => "Иванов"
-    ```
+# Husband's surname
+name.male_surname   # => "Иванов"
+```
 
 ## Contributing
 
