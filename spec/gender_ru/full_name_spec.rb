@@ -12,6 +12,11 @@ describe GenderRu::FullName do
       expect{ described_class.new {} }.to_not raise_error
     end
 
+    it 'should set gender and ethnicity to unknown by default' do
+      subject.ethnicity.should == :unknown
+      subject.gender.should == :unknown
+    end
+
     it 'should set name, surname, patronymic, gender and ethnicity' do
       subj = described_class.new surname: 'Прокофьева', name: 'Глафира', patronymic: 'Ильинична'
       subj.name.should == 'Глафира'
