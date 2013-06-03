@@ -8,11 +8,11 @@ module GenderRu
     SOGL_LETTERS = 'бвгджзйклмнпрстуфхцчшщ'
 
     def initialize(options = {})
-      @name = options[:name].to_s
-      @surname = options[:surname].to_s
+      @name       = options[:name].to_s
+      @surname    = options[:surname].to_s
       @patronymic = options[:patronymic].to_s.gsub(/ичь$/, 'ич')
-      @gender = nil
-      @ethnicity = nil
+      @gender     = :unknown
+      @ethnicity  = :unknown
       analyze
     end
 
