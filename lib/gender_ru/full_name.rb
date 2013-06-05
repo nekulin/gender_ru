@@ -1,4 +1,5 @@
 # encoding: utf-8
+require 'yaml'
 
 module GenderRu
   class FullName
@@ -62,6 +63,28 @@ module GenderRu
 
     def azerbaijanian?
       ethnicity == :azerbaijanian
+    end
+
+    def humanize(method, locale = :en)
+      value = send(method)
+      locale_data = self.class.locale_data[locale.to_s]
+      if locale_data.is_a?(Hash) && locale_data[method.to_s].is_a?(Hash) && locale_data[method.to_s][value.to_s].present?
+        locale_data[method.to_s][value.to_s]
+      else
+        value.to_s
+      end        
+    end
+
+    def self.locale_data
+      unless defined? @@locale_data
+        @@locale_data = {}
+        Dir.glob(File.join(Pathname.new(__FILE__).dirname, 'locale','*.yml')).each do |filename|
+          yaml = YAML.load_file(filename)
+          @@locale_data.merge!(yaml)
+        end
+        @@locale_data.freeze
+      end
+      @@locale_data
     end
 
     private

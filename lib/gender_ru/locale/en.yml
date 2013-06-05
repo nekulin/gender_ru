@@ -1,0 +1,9 @@
+en:
+  ethnicity:
+    unknown: 'Unknown'
+    azerbaijanian: 'Azerbaijanian'
+    russian: 'Russian'
+  gender:
+    unknown: 'Unknown'
+    male: 'Male'
+    female: 'Female'

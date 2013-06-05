@@ -1,6 +1,36 @@
 require 'spec_helper'
 
 describe GenderRu::FullName do
+  
+  let(:expected_locale_data) do
+    {
+      'ru' => {
+        'ethnicity' => {
+          'unknown' => 'Не известно',
+          'russian'  => 'Русский',
+          'azerbaijanian' => 'Азербайджанец'
+        },
+        'gender' => {
+          'unknown' => 'Не известно',
+          'male' => 'Мужской',
+          'female' => 'Женский'
+        }
+      },
+      'en' => {
+        'ethnicity' => {
+          'unknown' => 'Unknown',
+          'russian' => 'Russian',
+          'azerbaijanian' => 'Azerbaijanian'
+        },
+        'gender' => {
+          'unknown' => 'Unknown', 
+          'male' => 'Male',
+          'female' => 'Female'
+        }
+      }
+    }
+  end
+  
   it { should respond_to(:name) }
   it { should respond_to(:patronymic) }
   it { should respond_to(:surname) }
@@ -234,6 +264,46 @@ describe GenderRu::FullName do
         subject.instance_eval { @ethnicity = value }
         subject.should_not be_azerbaijanian
       end
+    end
+  end
+  
+  describe '#humanize' do
+    it 'should use english locale by default' do
+      subject = described_class.new name: 'Иван', patronymic: 'Иванович', surname: 'Иванов'
+      subject.humanize(:ethnicity).should == 'Russian'
+    end
+      
+    it 'should return method\'s stringified value if locale is missing' do
+      subject.humanize(:male?).should == subject.male?.to_s
+    end
+      
+    it 'should return proper values' do
+      
+      
+      test_cases = {
+        ethnicity: [:unknown, :russian, :azerbaijanian],
+        gender: [:unknown, :male, :female]
+      }
+      
+      [:en, :ru].each do |locale|
+        test_cases.each do |method, stubs|
+          stubs.each do |value|
+            subject.stub(method).and_return(value)
+            subject.humanize(method, locale).should == expected_locale_data[locale.to_s][method.to_s][value.to_s]
+          end
+        end
+      end      
+    end
+    
+    it 'should use .locale_data' do
+      described_class.should_receive(:locale_data).and_return({})
+      subject.humanize(:ethnicity).should == 'unknown'
+    end    
+  end
+  
+  describe '.locale_data' do
+    it 'should return expected locale data' do
+      described_class.locale_data.should == expected_locale_data
     end
   end
 end
