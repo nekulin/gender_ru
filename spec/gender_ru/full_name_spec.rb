@@ -41,7 +41,7 @@ describe GenderRu::FullName do
     it 'should accept hash as first param' do
       expect{ described_class.new {} }.to_not raise_error
     end
-
+      
     it 'should set gender and ethnicity to unknown by default' do
       subject.ethnicity.should == :unknown
       subject.gender.should == :unknown
@@ -54,6 +54,24 @@ describe GenderRu::FullName do
       subj.patronymic.should == 'Ильинична'
       subj.gender.should == :female
       subj.ethnicity.should == :russian
+    end
+    
+    it 'should set name, surname, patronymic, gender and ethnicity even if hash contains string keys' do
+      subj = described_class.new 'surname' => 'Прокофьева', 'name' => 'Глафира', 'patronymic' => 'Ильинична'
+      subj.name.should == 'Глафира'
+      subj.surname.should == 'Прокофьева'
+      subj.patronymic.should == 'Ильинична'
+      subj.gender.should == :female
+      subj.ethnicity.should == :russian
+    end
+    
+    it 'should not use :gender or :ethnicity from hash' do
+      [{:gender => :male, :ethnicity => :russian},
+       {'gender' => :male, 'ethnicity' => :russian}].each do |options|
+        subj = described_class.new options
+        subj.gender.should == :unknown
+        subj.ethnicity.should == :unknown
+      end
     end
 
     it 'should detect azerbaijanians by patronymic' do
@@ -304,6 +322,26 @@ describe GenderRu::FullName do
   describe '.locale_data' do
     it 'should return expected locale data' do
       described_class.locale_data.should == expected_locale_data
+    end
+  end
+  
+  describe '.ethnicity' do
+    it 'should delegatge to just created object' do
+      options = { name: 'Иван', patronymic: 'Иванович', surname: 'Иванов'}
+      obj = stub
+      obj.should_receive(:ethnicity).and_return('something special')
+      described_class.should_receive(:new).with(options).and_return(obj)
+      described_class.ethnicity(options).should == 'something special'
+    end
+  end
+  
+  describe '.gender' do
+    it 'should delegatge to just created object' do
+      options = { name: 'Иван', patronymic: 'Иванович', surname: 'Иванов'}
+      obj = stub
+      obj.should_receive(:gender).and_return('something special')
+      described_class.should_receive(:new).with(options).and_return(obj)
+      described_class.gender(options).should == 'something special'
     end
   end
 end
