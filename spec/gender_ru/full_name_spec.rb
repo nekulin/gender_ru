@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe GenderRu::FullName do
-  
+
   let(:expected_locale_data) do
     {
       'ru' => {
@@ -23,14 +23,14 @@ describe GenderRu::FullName do
           'azerbaijanian' => 'Azerbaijanian'
         },
         'gender' => {
-          'unknown' => 'Unknown', 
+          'unknown' => 'Unknown',
           'male' => 'Male',
           'female' => 'Female'
         }
       }
     }
   end
-  
+
   it { should respond_to(:name) }
   it { should respond_to(:patronymic) }
   it { should respond_to(:surname) }
@@ -41,7 +41,7 @@ describe GenderRu::FullName do
     it 'should accept hash as first param' do
       expect{ described_class.new {} }.to_not raise_error
     end
-      
+
     it 'should set gender and ethnicity to unknown by default' do
       subject.ethnicity.should == :unknown
       subject.gender.should == :unknown
@@ -55,7 +55,7 @@ describe GenderRu::FullName do
       subj.gender.should == :female
       subj.ethnicity.should == :russian
     end
-    
+
     it 'should set name, surname, patronymic, gender and ethnicity even if hash contains string keys' do
       subj = described_class.new 'surname' => 'Прокофьева', 'name' => 'Глафира', 'patronymic' => 'Ильинична'
       subj.name.should == 'Глафира'
@@ -64,39 +64,13 @@ describe GenderRu::FullName do
       subj.gender.should == :female
       subj.ethnicity.should == :russian
     end
-    
+
     it 'should not use :gender or :ethnicity from hash' do
       [{:gender => :male, :ethnicity => :russian},
        {'gender' => :male, 'ethnicity' => :russian}].each do |options|
         subj = described_class.new options
         subj.gender.should == :unknown
         subj.ethnicity.should == :unknown
-      end
-    end
-
-    it 'should detect azerbaijanians by patronymic' do
-      %w(Орхан-оглы Орхан-кызы Орхан-улы Джамал-гызы).each do |patr|
-        subj = described_class.new surname: 'Джеваншир', name: 'Джамал', patronymic: patr
-        subj.should be_azerbaijanian
-      end
-    end
-
-    it 'should detect russians by patronymic' do
-      %w(Михайлович Михайловна Ильинична).each do |patr|
-        subj = described_class.new surname: 'Джеваншир', name: 'Джамал', patronymic: patr
-        subj.should be_russian
-      end
-    end
-
-    it 'should detect gender by patronymic' do
-      %w(Петровна Ильинична Орхан-кызы Джамал-гызы).each do |patr|
-        subj = described_class.new surname: 'Джеваншир', name: 'Джамал', patronymic: patr
-        subj.should be_female
-      end
-
-      %w(Петрович Орхан-оглы Орхан-улы).each do |patr|
-        subj = described_class.new surname: 'Джеваншир', name: 'Джамал', patronymic: patr
-        subj.should be_male
       end
     end
   end
@@ -257,52 +231,24 @@ describe GenderRu::FullName do
     end
   end
 
-  describe '#russian?' do
-    it 'should return true when ethnicity is :russian' do
-      subject.instance_eval { @ethnicity = :russian }
-      subject.should be_russian
-    end
-
-    it 'should return false when ethnicity is not :russian' do
-      ['russian', 0, nil, {}, []].each do |value|
-        subject.instance_eval { @ethnicity = value }
-        subject.should_not be_russian
-      end
-    end
-  end
-
-  describe '#azerbaijanian?' do
-    it 'should return true when ethnicity is :azerbaijanian' do
-      subject.instance_eval { @ethnicity = :azerbaijanian }
-      subject.should be_azerbaijanian
-    end
-
-    it 'should return false when ethnicity is not :azerbaijanian' do
-      ['azerbaijanian', 0, nil, {}, []].each do |value|
-        subject.instance_eval { @ethnicity = value }
-        subject.should_not be_azerbaijanian
-      end
-    end
-  end
-  
   describe '#humanize' do
     it 'should use english locale by default' do
       subject = described_class.new name: 'Иван', patronymic: 'Иванович', surname: 'Иванов'
       subject.humanize(:ethnicity).should == 'Russian'
     end
-      
+
     it 'should return method\'s stringified value if locale is missing' do
       subject.humanize(:male?).should == subject.male?.to_s
     end
-      
+
     it 'should return proper values' do
-      
-      
+
+
       test_cases = {
         ethnicity: [:unknown, :russian, :azerbaijanian],
         gender: [:unknown, :male, :female]
       }
-      
+
       [:en, :ru].each do |locale|
         test_cases.each do |method, stubs|
           stubs.each do |value|
@@ -310,21 +256,15 @@ describe GenderRu::FullName do
             subject.humanize(method, locale).should == expected_locale_data[locale.to_s][method.to_s][value.to_s]
           end
         end
-      end      
+      end
     end
-    
+
     it 'should use .locale_data' do
       described_class.should_receive(:locale_data).and_return({})
       subject.humanize(:ethnicity).should == 'unknown'
-    end    
-  end
-  
-  describe '.locale_data' do
-    it 'should return expected locale data' do
-      described_class.locale_data.should == expected_locale_data
     end
   end
-  
+
   describe '.ethnicity' do
     it 'should delegatge to just created object' do
       options = { name: 'Иван', patronymic: 'Иванович', surname: 'Иванов'}
@@ -334,7 +274,7 @@ describe GenderRu::FullName do
       described_class.ethnicity(options).should == 'something special'
     end
   end
-  
+
   describe '.gender' do
     it 'should delegatge to just created object' do
       options = { name: 'Иван', patronymic: 'Иванович', surname: 'Иванов'}
