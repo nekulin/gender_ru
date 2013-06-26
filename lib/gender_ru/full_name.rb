@@ -340,7 +340,7 @@ module GenderRu
     def normalize_name(raw_name)
       name = raw_name.to_s
       names = name.split('-').reduce([]) do |nms, subname|
-        nms << Unicode::capitalize(Unicode::downcase(subname))
+        nms << subname.mb_chars.downcase.capitalize.to_s
       end
       names.join('-')
     end
