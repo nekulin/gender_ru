@@ -268,7 +268,7 @@ describe GenderRu::FullName do
   describe '.ethnicity' do
     it 'should delegatge to just created object' do
       options = { name: 'Иван', patronymic: 'Иванович', surname: 'Иванов'}
-      obj = stub
+      obj = double
       obj.should_receive(:ethnicity).and_return('something special')
       described_class.should_receive(:new).with(options).and_return(obj)
       described_class.ethnicity(options).should == 'something special'
@@ -278,7 +278,7 @@ describe GenderRu::FullName do
   describe '.gender' do
     it 'should delegatge to just created object' do
       options = { name: 'Иван', patronymic: 'Иванович', surname: 'Иванов'}
-      obj = stub
+      obj = double
       obj.should_receive(:gender).and_return('something special')
       described_class.should_receive(:new).with(options).and_return(obj)
       described_class.gender(options).should == 'something special'
