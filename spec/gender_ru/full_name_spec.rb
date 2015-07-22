@@ -39,7 +39,7 @@ describe GenderRu::FullName do
 
   describe 'constructor' do
     it 'should accept hash as first param' do
-      expect{ described_class.new {} }.to_not raise_error
+      -> { described_class.new {} }.should_not raise_error
     end
 
     it 'should set gender and ethnicity to unknown by default' do
